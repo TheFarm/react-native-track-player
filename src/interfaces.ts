@@ -170,6 +170,8 @@ interface TrackMetadataBase {
   rating?: number | boolean
 }
 
+export interface TrackMetadata extends TrackMetadataBase {}
+
 export interface NowPlayingMetadata extends TrackMetadataBase {
   elapsedTime?: number
 }
