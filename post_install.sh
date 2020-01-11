@@ -6,11 +6,13 @@ while IFS= read -r line; do
     path=\"$(echo ${BASH_REMATCH[1]} | sed 's/.*= //')\"
     url=$(echo ${BASH_REMATCH[2]} | sed 's/.*= //')
     if [ -d $path ] ; then 
+      echo "Folder ${path} seems to exist, performing git pull"
       start=$PWD
       cd $path
       git pull 
       cd $PWD 
     else 
+      echo "Folder ${path} doesn't exist, performing git clone"
       git clone $url $path
     fi 
   fi 
