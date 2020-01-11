@@ -11,6 +11,7 @@ Pod::Spec.new do |s|
   s.author       = "David Chavez"
   s.homepage     = package['repository']['url']
   s.platform     = :ios, "10.0"
+  s.swift_version = "4.2"
 
   s.source       = { :git => package['repository']['url'], :tag => "v#{s.version}" }
   s.source_files  = "ios/RNTrackPlayer/*.{h,m,swift}",
