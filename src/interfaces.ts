@@ -170,6 +170,7 @@ interface TrackMetadataBase {
   rating?: number | boolean
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface TrackMetadata extends TrackMetadataBase {}
 
 export interface NowPlayingMetadata extends TrackMetadataBase {
