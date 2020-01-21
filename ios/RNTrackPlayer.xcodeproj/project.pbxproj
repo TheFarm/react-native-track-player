@@ -32,6 +32,7 @@
 		1645FE1923D70E1B00A9CF5A /* AVPlayerWrapperProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1645FD6123D70E1A00A9CF5A /* AVPlayerWrapperProtocol.swift */; };
 		1645FE1A23D70E1B00A9CF5A /* AVPlayerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1645FD6223D70E1A00A9CF5A /* AVPlayerWrapper.swift */; };
 		1645FE1B23D70E1B00A9CF5A /* AVPlayerWrapperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1645FD6323D70E1A00A9CF5A /* AVPlayerWrapperDelegate.swift */; };
+		1645FE1C23D7377200A9CF5A /* RNTrackPlayerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E282D1F07D76F00B71D2A /* RNTrackPlayerBridge.m */; };
 		9A0CF10E2046E5AC0093A5DF /* PitchAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0CF10D2046E5AC0093A5DF /* PitchAlgorithms.swift */; };
 		9B0E282F1F07D76F00B71D2A /* RNTrackPlayerBridge.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9B0E282C1F07D76F00B71D2A /* RNTrackPlayerBridge.h */; };
 		9B18C2FA226356560019375A /* SessionCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B18C2F9226356560019375A /* SessionCategories.swift */; };
@@ -348,6 +349,7 @@
 				1645FE0F23D70E1B00A9CF5A /* RemoteCommand.swift in Sources */,
 				1645FE0D23D70E1B00A9CF5A /* AudioSessionController.swift in Sources */,
 				1645FE1223D70E1B00A9CF5A /* NowPlayingInfoController.swift in Sources */,
+				1645FE1C23D7377200A9CF5A /* RNTrackPlayerBridge.m in Sources */,
 				1645FE0323D70E1A00A9CF5A /* AudioPlayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
