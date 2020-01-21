@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "16.8.3",
+    "react": "16.9.0",
     "react-native": "^0.61",
     "react-native-gesture-handler": "^1.5",
     "react-native-track-player": "file:..",

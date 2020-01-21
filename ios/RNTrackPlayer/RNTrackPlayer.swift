@@ -191,7 +191,7 @@ public class RNTrackPlayer: RCTEventEmitter {
             self?.sendEvent(withName: "playback-error", body: ["error": error?.localizedDescription])
         }
         
-        player.event.playbackEnd.addListener(self) { [weak self] reason in
+        player.event.playbackEnd.addListener(self) { [weak self] (reason, currentItem, currentTime, nextItem) in
             guard let `self` = self else { return }
 
             if reason == .playedUntilEnd {
@@ -200,16 +200,16 @@ public class RNTrackPlayer: RCTEventEmitter {
                 // for .playedUntilEnd
                 // nextTrack might be nil if there are no more, but still send the event for consistency
                 self.sendEvent(withName: "playback-track-changed", body: [
-                    "track": (self.player.currentItem as? Track)?.id,
-                    "position": self.player.currentTime,
-                    "nextTrack": (self.player.nextItems.first as? Track)?.id,
+                    "track": (currentItem as? Track)?.id as Any,
+                    "position": currentTime as Any,
+                    "nextTrack": (nextItem as? Track)?.id as Any,
                     ])
                 
-                if self.player.nextItems.count == 0 {
+                if nextItem == nil {
                     // fire an event for the queue ending
                     self.sendEvent(withName: "playback-queue-ended", body: [
-                        "track": (self.player.currentItem as? Track)?.id,
-                        "position": self.player.currentTime,
+                        "track": (currentItem as? Track)?.id as Any,
+                        "position": currentTime as Any,
                         ])
                 } else {
                     // we are not using automaticallyPlayNextSong on the player in order

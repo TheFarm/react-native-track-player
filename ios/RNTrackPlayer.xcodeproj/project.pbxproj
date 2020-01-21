@@ -33,7 +33,6 @@
 		1645FE1A23D70E1B00A9CF5A /* AVPlayerWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1645FD6223D70E1A00A9CF5A /* AVPlayerWrapper.swift */; };
 		1645FE1B23D70E1B00A9CF5A /* AVPlayerWrapperDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1645FD6323D70E1A00A9CF5A /* AVPlayerWrapperDelegate.swift */; };
 		9A0CF10E2046E5AC0093A5DF /* PitchAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0CF10D2046E5AC0093A5DF /* PitchAlgorithms.swift */; };
-		9B0E282E1F07D76F00B71D2A /* RNTrackPlayerBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0E282D1F07D76F00B71D2A /* RNTrackPlayerBridge.m */; };
 		9B0E282F1F07D76F00B71D2A /* RNTrackPlayerBridge.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9B0E282C1F07D76F00B71D2A /* RNTrackPlayerBridge.h */; };
 		9B18C2FA226356560019375A /* SessionCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B18C2F9226356560019375A /* SessionCategories.swift */; };
 		9B58DF3B1F40C0F000C2105E /* RNTrackPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B58DF3A1F40C0F000C2105E /* RNTrackPlayer.swift */; };
@@ -60,7 +59,6 @@
 		1645FD4523D70E1A00A9CF5A /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		1645FD4623D70E1A00A9CF5A /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		1645FD4723D70E1A00A9CF5A /* APError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APError.swift; sourceTree = "<group>"; };
-		1645FD4823D70E1A00A9CF5A /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		1645FD4923D70E1A00A9CF5A /* TimeEventFrequency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeEventFrequency.swift; sourceTree = "<group>"; };
 		1645FD4B23D70E1A00A9CF5A /* AVPlayerObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVPlayerObserver.swift; sourceTree = "<group>"; };
 		1645FD4C23D70E1A00A9CF5A /* AVPlayerItemNotificationObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVPlayerItemNotificationObserver.swift; sourceTree = "<group>"; };
@@ -129,7 +127,6 @@
 				1645FD4523D70E1A00A9CF5A /* AudioPlayer.swift */,
 				1645FD4623D70E1A00A9CF5A /* Event.swift */,
 				1645FD4723D70E1A00A9CF5A /* APError.swift */,
-				1645FD4823D70E1A00A9CF5A /* .gitkeep */,
 				1645FD4923D70E1A00A9CF5A /* TimeEventFrequency.swift */,
 				1645FD4A23D70E1A00A9CF5A /* Observer */,
 				1645FD4F23D70E1A00A9CF5A /* QueueManager.swift */,
@@ -321,7 +318,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1645FE0823D70E1A00A9CF5A /* AVPlayerItemNotificationObserver.swift in Sources */,
-				9B0E282E1F07D76F00B71D2A /* RNTrackPlayerBridge.m in Sources */,
 				1645FE0C23D70E1B00A9CF5A /* AudioSession.swift in Sources */,
 				1645FE0B23D70E1B00A9CF5A /* QueueManager.swift in Sources */,
 				1645FE1923D70E1B00A9CF5A /* AVPlayerWrapperProtocol.swift in Sources */,

@@ -40,6 +40,7 @@ ControlButton.propTypes = {
 
 export default function Player(props) {
   const playbackState = usePlaybackState()
+  const progress = useProgress()
   const [trackTitle, setTrackTitle] = useState('')
   const [trackArtwork, setTrackArtwork] = useState('')
   const [trackArtist, setTrackArtist] = useState('')
@@ -70,6 +71,11 @@ export default function Player(props) {
         <ControlButton title={'<<'} onPress={onPrevious} />
         <ControlButton title={middleButtonText} onPress={onTogglePlayback} />
         <ControlButton title={'>>'} onPress={onNext} />
+      </View>
+      <View>
+        <Text>Current: {progress.position | 0} sec</Text>
+        <Text>Buffered: {progress.bufferedPosition | 0} sec</Text>
+        <Text>Duration: {progress.duration | 0} sec</Text>
       </View>
     </View>
   )
@@ -105,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
   },
   progress: {
-    height: 1,
+    height: 10,
     width: '90%',
     marginTop: 10,
     flexDirection: 'row',

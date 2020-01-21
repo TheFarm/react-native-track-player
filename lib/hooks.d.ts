@@ -1,5 +1,5 @@
 import { State, Event } from './index';
-/** Get current playback state and subsequent updatates  */
+/** Get current playback state and subsequent updates  */
 export declare const usePlaybackState: () => State;
 declare type Handler = (payload: {
     type: Event;
@@ -12,7 +12,7 @@ declare type Handler = (payload: {
  */
 export declare const useTrackPlayerEvents: (events: Event[], handler: Handler) => void;
 /**
- * Poll for track progress for the given interval (in miliseconds)
+ * Poll for track progress for the given interval (in milliseconds)
  * @param interval - ms interval
  */
 export declare function useProgress(updateInterval?: number): {
