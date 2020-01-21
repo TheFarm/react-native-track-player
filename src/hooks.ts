@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import TrackPlayer, { State, Event } from './index'
 
-/** Get current playback state and subsequent updatates  */
+/** Get current playback state and subsequent updates  */
 export const usePlaybackState = () => {
   const [state, setState] = useState(State.None)
 
@@ -66,7 +66,7 @@ export const useTrackPlayerEvents = (events: Event[], handler: Handler) => {
 }
 
 /**
- * Poll for track progress for the given interval (in miliseconds)
+ * Poll for track progress for the given interval (in milliseconds)
  * @param interval - ms interval
  */
 export function useProgress(updateInterval?: number) {
