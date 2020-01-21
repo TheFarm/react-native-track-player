@@ -13,10 +13,8 @@ import AVFoundation
 class Track: NSObject, AudioItem, InitialTiming, TimePitching, AssetOptionsProviding {
     let id: String
     let url: MediaURL
-    
-    @objc var title: String
-    @objc var artist: String
-    
+    var title: String?
+    var artist: String?
     var date: String?
     var desc: String?
     var genre: String?
@@ -26,24 +24,21 @@ class Track: NSObject, AudioItem, InitialTiming, TimePitching, AssetOptionsProvi
     var initialTime: TimeInterval = 0.0
     let headers: [String: Any]?
     let pitchAlgorithm: String?
-    
-    @objc var album: String?
-    @objc var artwork: MPMediaItemArtwork?
+    var album: String?
+    var artwork: MPMediaItemArtwork?
     
     private var originalObject: [String: Any]
     
     init?(dictionary: [String: Any]) {
-        guard let id = dictionary["id"] as? String,
-            let title = dictionary["title"] as? String,
-            let artist = dictionary["artist"] as? String,
+        guard
+            let id = dictionary["id"] as? String,
             let url = MediaURL(object: dictionary["url"])
             else { return nil }
         
         self.id = id
         self.url = url
-        self.title = title
-        self.artist = artist
-        
+        self.title = dictionary["title"] as? String
+        self.artist = dictionary["artist"] as? String
         self.date = dictionary["date"] as? String
         self.album = dictionary["album"] as? String
         self.genre = dictionary["genre"] as? String
@@ -67,9 +62,8 @@ class Track: NSObject, AudioItem, InitialTiming, TimePitching, AssetOptionsProvi
     }
     
     func updateMetadata(dictionary: [String: Any]) {
-        self.title = (dictionary["title"] as? String) ?? self.title
-        self.artist = (dictionary["artist"] as? String) ?? self.artist
-        
+        self.title = dictionary["title"] as? String
+        self.artist = dictionary["artist"] as? String
         self.date = dictionary["date"] as? String
         self.album = dictionary["album"] as? String
         self.genre = dictionary["genre"] as? String

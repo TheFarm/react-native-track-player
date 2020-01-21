@@ -353,11 +353,11 @@ public class RNTrackPlayer: RCTEventEmitter {
             
             try? player.add(items: tracks, at: insertIndex)
         } else {
-            if (player.currentItem == nil && tracks.count > 0) {
+            if let nextTrack = tracks.first, player.currentItem == nil {
                 sendEvent(withName: "playback-track-changed", body: [
                     "track": nil,
                     "position": 0,
-                    "nextTrack": tracks.first!.id
+                    "nextTrack": nextTrack.id
                     ])
             }
             
@@ -402,9 +402,9 @@ public class RNTrackPlayer: RCTEventEmitter {
         }
         
         sendEvent(withName: "playback-track-changed", body: [
-            "track": (player.currentItem as? Track)?.id,
-            "position": player.currentTime,
-            "nextTrack": trackId,
+            "track": (player.currentItem as? Track)?.id as Any,
+            "position": player.currentTime as Any,
+            "nextTrack": trackId as Any,
             ])
         
         print("Skipping to track:", trackId)
@@ -417,9 +417,9 @@ public class RNTrackPlayer: RCTEventEmitter {
         print("Skipping to next track")
         do {
             sendEvent(withName: "playback-track-changed", body: [
-                "track": (player.currentItem as? Track)?.id,
-                "position": player.currentTime,
-                "nextTrack": (player.nextItems.first as? Track)?.id,
+                "track": (player.currentItem as? Track)?.id as Any,
+                "position": player.currentTime as Any,
+                "nextTrack": (player.nextItems.first as? Track)?.id as Any,
                 ])
             try player.next()
             resolve(NSNull())
@@ -433,9 +433,9 @@ public class RNTrackPlayer: RCTEventEmitter {
         print("Skipping to next track")
         do {
             sendEvent(withName: "playback-track-changed", body: [
-                "track": (player.currentItem as? Track)?.id,
-                "position": player.currentTime,
-                "nextTrack": (player.previousItems.last as? Track)?.id,
+                "track": (player.currentItem as? Track)?.id as Any,
+                "position": player.currentTime as Any,
+                "nextTrack": (player.previousItems.last as? Track)?.id as Any,
                 ])
             try player.previous()
             resolve(NSNull())

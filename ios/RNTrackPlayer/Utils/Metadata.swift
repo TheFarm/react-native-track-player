@@ -14,7 +14,7 @@ struct Metadata {
 
     static func update(for player: AudioPlayer, with metadata: [String: Any]) {
         currentImageTask?.cancel()
-        var ret: [NowPlayingInfoKeyValue] = []
+        var ret = [NowPlayingInfoKeyValue]()
         
         if let title = metadata["title"] as? String {
             ret.append(MediaItemProperty.title(title))

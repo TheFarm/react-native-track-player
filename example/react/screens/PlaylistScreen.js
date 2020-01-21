@@ -35,7 +35,7 @@ export default function LandingScreen() {
         title: 'Pure (Demo)',
         artist: 'David Chavez',
         artwork: 'https://picsum.photos/200',
-        initialTime: 5,
+        initialTime: 0,
       })
       await TrackPlayer.play()
     } else {

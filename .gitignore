@@ -41,6 +41,8 @@ windows/RNTrackPlayer/project.lock.json
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
+ios/Pods
+ios/Podfile.lock
 
 ## Other
 *.moved-aside
