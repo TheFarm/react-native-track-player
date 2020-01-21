@@ -19,6 +19,7 @@ public abstract class TrackMetadata {
     public String date;
     public String genre;
     public long duration;
+    public long initialTime;
 
     public RatingCompat rating;
 
@@ -31,7 +32,7 @@ public abstract class TrackMetadata {
         date = bundle.getString("date");
         genre = bundle.getString("genre");
         duration = Utils.toMillis(bundle.getDouble("duration", 0));
-
+        initialTime = Utils.toMillis(bundle.getDouble("initialTime", 0));
         rating = Utils.getRating(bundle, "rating", ratingType);
     }
 
