@@ -22,7 +22,7 @@ public class RNTrackPlayer: RCTEventEmitter {
 
         // disable auto advance, so that we can control the order of
         // operations in order to send accurate event data
-        player.automaticallyPlayNextSong = false
+        player.automaticallyLoadNextSong = false
 
         return player
     }()
@@ -74,6 +74,10 @@ public class RNTrackPlayer: RCTEventEmitter {
             "CAPABILITY_LIKE": Capability.like.rawValue,
             "CAPABILITY_DISLIKE": Capability.dislike.rawValue,
             "CAPABILITY_BOOKMARK": Capability.bookmark.rawValue,
+            
+            "REPEAT_MODE_NONE": AudioPlayerRepeatMode.none.rawValue,
+            "REPEAT_MODE_QUEUE": AudioPlayerRepeatMode.queue.rawValue,
+            "REPEAT_MODE_TRACK": AudioPlayerRepeatMode.track.rawValue,
         ]
     }
     
@@ -97,6 +101,8 @@ public class RNTrackPlayer: RCTEventEmitter {
             "remote-like",
             "remote-dislike",
             "remote-bookmark",
+            
+            "repeat-mode-changed",
         ]
     }
     
@@ -195,7 +201,6 @@ public class RNTrackPlayer: RCTEventEmitter {
             guard let `self` = self else { return }
 
             if reason == .playedUntilEnd {
-                // playbackEnd is called twice at the end of a track;
                 // we ignore .skippedToNext and only fire an event
                 // for .playedUntilEnd
                 // nextTrack might be nil if there are no more, but still send the event for consistency
@@ -215,7 +220,11 @@ public class RNTrackPlayer: RCTEventEmitter {
                     // we are not using automaticallyPlayNextSong on the player in order
                     // to be in control of specifically when the above events are sent
                     // so, attempt to go to the next track now
-                    try? self.player.next() 
+                    
+                    // also make sure that we're not supposed to repeat the current track first
+                    if self.player.repeatMode != .track {
+                        try? self.player.next()
+                    }
                 }
             }
 
@@ -311,17 +320,22 @@ public class RNTrackPlayer: RCTEventEmitter {
     
     @objc(updateOptions:resolver:rejecter:)
     public func update(options: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        let capabilitiesStr = options["capabilities"] as? [String]
-        let capabilities = capabilitiesStr?.compactMap { Capability(rawValue: $0) } ?? []
-        
-        let remoteCommands = capabilities.map { capability in
-            capability.mapToPlayerCommand(jumpInterval: options["jumpInterval"] as? NSNumber,
-                                          likeOptions: options["likeOptions"] as? [String: Any],
-                                          dislikeOptions: options["dislikeOptions"] as? [String: Any],
-                                          bookmarkOptions: options["bookmarkOptions"] as? [String: Any])
-        }
+        if let capabilitiesStr = options["capabilities"] as? [String] {
+            let capabilities = capabilitiesStr.compactMap { Capability(rawValue: $0) }
+            
+            let remoteCommands = capabilities.map { capability in
+                capability.mapToPlayerCommand(jumpInterval: options["jumpInterval"] as? NSNumber,
+                                              likeOptions: options["likeOptions"] as? [String: Any],
+                                              dislikeOptions: options["dislikeOptions"] as? [String: Any],
+                                              bookmarkOptions: options["bookmarkOptions"] as? [String: Any])
+            }
 
-        player.remoteCommands = remoteCommands
+            player.remoteCommands = remoteCommands
+        }
+        
+        if let automaticallyPlayWhenReady = options["automaticallyPlayWhenReady"] as? Bool {
+            player.automaticallyPlayWhenReady = automaticallyPlayWhenReady
+        }
         
         resolve(NSNull())
     }
@@ -361,7 +375,7 @@ public class RNTrackPlayer: RCTEventEmitter {
                     ])
             }
             
-            try? player.add(items: tracks, playWhenReady: false)
+            try? player.add(items: tracks)
         }
         
         resolve(NSNull())
@@ -393,6 +407,17 @@ public class RNTrackPlayer: RCTEventEmitter {
         resolve(NSNull())
     }
     
+    func downgradeRepeatMode() {
+        /// Downgrades to `.queue` if the user manually skips the repeated track
+        if player.repeatMode == .track {
+            print("Manual skip, downgrading repeat mode")
+            sendEvent(withName: "repeat-mode-changed", body: [
+                "repeatMode": AudioPlayerRepeatMode.queue.rawValue as Any
+                ])
+            player.repeatMode = .queue
+        }
+    }
+    
     @objc(skip:resolver:rejecter:)
     public func skip(to trackId: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         guard let trackIndex = player.queueManager.items.firstIndex(where: { ($0 as! Track).id == trackId })
@@ -408,7 +433,8 @@ public class RNTrackPlayer: RCTEventEmitter {
             ])
         
         print("Skipping to track:", trackId)
-        try? player.jumpToItem(atIndex: trackIndex, playWhenReady: player.playerState == .playing)
+        downgradeRepeatMode()
+        try? player.jumpToItem(atIndex: trackIndex)
         resolve(NSNull())
     }
     
@@ -419,28 +445,38 @@ public class RNTrackPlayer: RCTEventEmitter {
             sendEvent(withName: "playback-track-changed", body: [
                 "track": (player.currentItem as? Track)?.id as Any,
                 "position": player.currentTime as Any,
-                "nextTrack": (player.nextItems.first as? Track)?.id as Any,
+                "nextTrack": (player.nextItem as? Track)?.id as Any,
                 ])
+
+            downgradeRepeatMode()
             try player.next()
             resolve(NSNull())
         } catch (_) {
-            reject("queue_exhausted", "There is no tracks left to play", nil)
+            reject("queue_exhausted", "There's no tracks left to play", nil)
         }
     }
     
-    @objc(skipToPrevious:rejecter:)
-    public func skipToPrevious(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        print("Skipping to next track")
-        do {
-            sendEvent(withName: "playback-track-changed", body: [
-                "track": (player.currentItem as? Track)?.id as Any,
-                "position": player.currentTime as Any,
-                "nextTrack": (player.previousItems.last as? Track)?.id as Any,
-                ])
-            try player.previous()
+    @objc(skipToPrevious:resolver:rejecter:)
+    public func skipToPrevious(_ rewindWhenGte: Double = 0, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        if (rewindWhenGte > 0 && player.currentTime >= rewindWhenGte) || player.previousItem == nil {
+            print("Rewinding to start of track")
+            player.seek(to: 0)
             resolve(NSNull())
-        } catch (_) {
-            reject("no_previous_track", "There is no previous track", nil)
+        } else {
+            print("Skipping to previous track")
+            do {
+                sendEvent(withName: "playback-track-changed", body: [
+                    "track": (player.currentItem as? Track)?.id as Any,
+                    "position": player.currentTime as Any,
+                    "nextTrack": (player.previousItem as? Track)?.id as Any,
+                    ])
+                
+                downgradeRepeatMode()
+                try player.previous()
+                resolve(NSNull())
+            } catch (_) {
+                reject("no_previous_track", "There's no previous track", nil)
+            }
         }
     }
     
@@ -507,6 +543,39 @@ public class RNTrackPlayer: RCTEventEmitter {
     public func getRate(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         print("Getting current rate")
         resolve(player.rate)
+    }
+    
+    @objc(setRepeatMode:resolver:rejecter:)
+    public func setRepeat(mode: String, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        print("Setting repeat mode to \(mode)")
+        guard let repeatMode = AudioPlayerRepeatMode(rawValue: mode) else {
+            reject("invalid_repeat_mode", "Given mode: \(mode) is invalid", nil)
+            return
+        }
+        sendEvent(withName: "repeat-mode-changed", body: [
+            "repeatMode": repeatMode.rawValue as Any
+            ])
+        player.repeatMode = repeatMode
+        resolve(NSNull())
+    }
+    
+    @objc(getRepeatMode:rejecter:)
+    public func getRepeatMode(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        print("Getting current repeat mode")
+        resolve(player.repeatMode.rawValue)
+    }
+    
+    @objc(setPlayWhenReady:resolver:rejecter:)
+    public func setPlayWhenReady(autoplay: Bool, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        print("Setting PlayWhenReady to: \(autoplay)")
+        player.automaticallyPlayWhenReady = autoplay
+        resolve(NSNull())
+    }
+    
+    @objc(getPlayWhenReady:rejecter:)
+    public func getPlayWhenReady(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        print("Getting PlayWhenReady")
+        resolve(player.automaticallyPlayWhenReady)
     }
     
     @objc(getTrack:resolver:rejecter:)

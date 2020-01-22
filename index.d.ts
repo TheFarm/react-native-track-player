@@ -24,6 +24,7 @@ declare namespace RNTrackPlayer {
     | 'remote-like'
     | 'remote-dislike'
     | 'remote-bookmark'
+    | 'repeat-mode-changed'
 
   export type TrackType = 'default' | 'dash' | 'hls' | 'smoothstreaming'
 
@@ -33,6 +34,7 @@ declare namespace RNTrackPlayer {
   type RatingType = string | number
   type Capability = string | number
   type PitchAlgorithm = string | number
+  export type RepeatMode = 'none' | 'queue' | 'track'
 
   type EventHandler = (type: EventType, ...args: any[]) => void
   export function registerEventHandler(handler: EventHandler): void
@@ -45,8 +47,8 @@ declare namespace RNTrackPlayer {
 
   export interface TrackMetadata {
     duration?: number
-    title: string
-    artist: string
+    title?: string
+    artist?: string
     album?: string
     description?: string
     genre?: string
@@ -63,8 +65,8 @@ declare namespace RNTrackPlayer {
     headers?: { [key: string]: string }
     contentType?: string
     pitchAlgorithm?: PitchAlgorithm
+    initialTime?: number
     [key: string]: any
-    initialTime: number
   }
 
   export interface PlayerOptions {
@@ -110,6 +112,7 @@ declare namespace RNTrackPlayer {
     dislikeOptions?: FeedbackOptions
     bookmarkOptions?: FeedbackOptions
     stopWithApp?: boolean
+    automaticallyPlayWhenReady?: boolean
 
     capabilities?: Capability[]
     notificationCapabilities?: Capability[]
@@ -137,7 +140,7 @@ declare namespace RNTrackPlayer {
   export function remove(trackIds: string | string[]): Promise<void>
   export function skip(trackId: string): Promise<void>
   export function skipToNext(): Promise<void>
-  export function skipToPrevious(): Promise<void>
+  export function skipToPrevious(rewindWhenGte?: number): Promise<void>
   export function removeUpcomingTracks(): Promise<void>
 
   // Control Center / Notification Metadata Commands
@@ -153,6 +156,8 @@ declare namespace RNTrackPlayer {
   export function seekTo(seconds: number): Promise<void>
   export function setVolume(level: number): Promise<void>
   export function setRate(rate: number): Promise<void>
+  export function setRepeatMode(type: RepeatMode): Promise<void>
+  export function setPlayWhenReady(pwr: boolean): Promise<void>
 
   // Player Getters
 
@@ -165,6 +170,8 @@ declare namespace RNTrackPlayer {
   export function getBufferedPosition(): Promise<number>
   export function getState(): Promise<State>
   export function getRate(): Promise<number>
+  export function getRepeatMode(): Promise<RepeatMode>
+  export function getPlayWhenReady(): Promise<boolean>
 
   // Components
 

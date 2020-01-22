@@ -1,6 +1,8 @@
-import { State, Event } from './index';
+import { State, Event, RepeatMode } from './index';
 /** Get current playback state and subsequent updates  */
 export declare const usePlaybackState: () => State;
+/** Get current repeat mode and subsequent updates  */
+export declare const useRepeatMode: () => RepeatMode;
 declare type Handler = (payload: {
     type: Event;
     [key: string]: any;

@@ -96,6 +96,7 @@ export interface MetadataOptions {
   dislikeOptions?: FeedbackOptions
   bookmarkOptions?: FeedbackOptions
   stopWithApp?: boolean
+  automaticallyPlayWhenReady?: boolean
 
   capabilities?: Capability[]
   notificationCapabilities?: Capability[]
@@ -133,6 +134,7 @@ export enum Event {
   RemoteLike = 'remote-like',
   RemoteDislike = 'remote-dislike',
   RemoteBookmark = 'remote-bookmark',
+  RepeatModeChanged = 'repeat-mode-changed',
 }
 
 export enum TrackType {
@@ -156,6 +158,12 @@ export enum State {
   Stopped = TrackPlayer.STATE_STOPPED,
   Buffering = TrackPlayer.STATE_BUFFERING,
   Connecting = TrackPlayer.STATE_CONNECTING,
+}
+
+export enum RepeatMode {
+  None = 'none',
+  Queue = 'queue',
+  Track = 'track',
 }
 
 interface TrackMetadataBase {
@@ -184,6 +192,7 @@ export interface Track extends TrackMetadataBase {
   userAgent?: string
   contentType?: string
   pitchAlgorithm?: PitchAlgorithm
+  initialTime?: number
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any
 }

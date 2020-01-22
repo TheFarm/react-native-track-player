@@ -1,7 +1,16 @@
 import { Platform, AppRegistry, DeviceEventEmitter, NativeEventEmitter, NativeModules } from 'react-native'
 // @ts-ignore
 import * as resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
-import { MetadataOptions, PlayerOptions, Event, Track, State, TrackMetadata, NowPlayingMetadata } from './interfaces'
+import {
+  MetadataOptions,
+  PlayerOptions,
+  Event,
+  Track,
+  State,
+  RepeatMode,
+  TrackMetadata,
+  NowPlayingMetadata,
+} from './interfaces'
 
 const { TrackPlayerModule: TrackPlayer } = NativeModules
 const emitter = Platform.OS !== 'android' ? new NativeEventEmitter(TrackPlayer) : DeviceEventEmitter
@@ -83,8 +92,8 @@ async function skipToNext(): Promise<void> {
   return TrackPlayer.skipToNext()
 }
 
-async function skipToPrevious(): Promise<void> {
-  return TrackPlayer.skipToPrevious()
+async function skipToPrevious(rewindWhenGte?: number): Promise<void> {
+  return TrackPlayer.skipToPrevious(rewindWhenGte || 0)
 }
 
 // MARK: - Control Center / Notifications API
@@ -147,6 +156,14 @@ async function setRate(rate: number): Promise<void> {
   return TrackPlayer.setRate(rate)
 }
 
+async function setRepeatMode(repeat: RepeatMode): Promise<void> {
+  return TrackPlayer.setRepeatMode(repeat)
+}
+
+async function setPlayWhenReady(pwr: boolean): Promise<void> {
+  return TrackPlayer.setPlayWhenReady(pwr)
+}
+
 // MARK: - Getters
 
 async function getVolume(): Promise<number> {
@@ -185,6 +202,14 @@ async function getState(): Promise<State> {
   return TrackPlayer.getState()
 }
 
+async function getRepeatMode(): Promise<RepeatMode> {
+  return TrackPlayer.getRepeatMode()
+}
+
+async function getPlayWhenReady(): Promise<boolean> {
+  return TrackPlayer.getPlayWhenReady()
+}
+
 export * from './hooks'
 export * from './interfaces'
 
@@ -217,6 +242,8 @@ export default {
   seekTo,
   setVolume,
   setRate,
+  setRepeatMode,
+  setPlayWhenReady,
 
   // MARK: - Getters
   getVolume,
@@ -228,4 +255,6 @@ export default {
   getBufferedPosition,
   getPosition,
   getState,
+  getRepeatMode,
+  getPlayWhenReady,
 }

@@ -6,11 +6,12 @@ import TrackPlayer, {
   usePlaybackState,
   useProgress,
   useTrackPlayerEvents,
+  useRepeatMode,
 } from 'react-native-track-player'
 import { Image, StyleSheet, Text, TouchableOpacity, View, ViewPropTypes } from 'react-native'
 
 function ProgressBar() {
-  const progress = useProgress()
+  const progress = useProgress(250)
 
   return (
     <View style={styles.progress}>
@@ -41,10 +42,11 @@ ControlButton.propTypes = {
 export default function Player(props) {
   const playbackState = usePlaybackState()
   const progress = useProgress()
+  const repeatMode = useRepeatMode()
   const [trackTitle, setTrackTitle] = useState('')
   const [trackArtwork, setTrackArtwork] = useState('')
   const [trackArtist, setTrackArtist] = useState('')
-  useTrackPlayerEvents(['playback-track-changed'], async event => {
+  useTrackPlayerEvents([Event.PlaybackTrackChanged], async event => {
     if (event.type === Event.PlaybackTrackChanged) {
       const track = await TrackPlayer.getTrack(event.nextTrack)
       setTrackTitle(track.title)
@@ -53,17 +55,29 @@ export default function Player(props) {
     }
   })
 
-  const { style, onNext, onPrevious, onTogglePlayback } = props
+  const {
+    style,
+    onNext,
+    onPrevious,
+    onTogglePlayback,
+    onTogglePlayWhenReady,
+    onToggleRepeatMode,
+    playWhenReady,
+  } = props
 
   var middleButtonText = 'Play'
 
-  if (playbackState === State.Playing || playbackState === State.Buffering) {
+  if (playbackState === State.Playing) {
     middleButtonText = 'Pause'
+  } else if (playbackState === State.Buffering || playbackState === State.Connecting) {
+    middleButtonText = 'Loading'
+  } else if (playbackState === State.None) {
+    middleButtonText = 'Load'
   }
 
   return (
     <View style={[styles.card, style]}>
-      <Image style={styles.cover} source={{ uri: trackArtwork }} />
+      {trackArtwork !== '' && <Image style={styles.cover} source={{ uri: trackArtwork }} />}
       <ProgressBar />
       <Text style={styles.title}>{trackTitle}</Text>
       <Text style={styles.artist}>{trackArtist}</Text>
@@ -71,6 +85,10 @@ export default function Player(props) {
         <ControlButton title={'<<'} onPress={onPrevious} />
         <ControlButton title={middleButtonText} onPress={onTogglePlayback} />
         <ControlButton title={'>>'} onPress={onNext} />
+      </View>
+      <View style={styles.controls}>
+        <ControlButton title={`Repeat: ${repeatMode}`} onPress={onToggleRepeatMode} />
+        <ControlButton title={`Auto play: ${playWhenReady}`} onPress={onTogglePlayWhenReady} />
       </View>
       <View>
         <Text>Current: {progress.position | 0} sec</Text>
@@ -86,10 +104,14 @@ Player.propTypes = {
   onNext: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
   onTogglePlayback: PropTypes.func.isRequired,
+  onTogglePlayWhenReady: PropTypes.func.isRequired,
+  onToggleRepeatMode: PropTypes.func.isRequired,
+  playWhenReady: PropTypes.bool,
 }
 
 Player.defaultProps = {
   style: {},
+  playWhenReady: true,
 }
 
 const styles = StyleSheet.create({
@@ -115,6 +137,7 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: 10,
     flexDirection: 'row',
+    backgroundColor: 'grey',
   },
   title: {
     marginTop: 10,

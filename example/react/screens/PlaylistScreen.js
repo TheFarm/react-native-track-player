@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import TrackPlayer, { Capability, State, usePlaybackState } from 'react-native-track-player'
+import TrackPlayer, { Capability, State, usePlaybackState, RepeatMode } from 'react-native-track-player'
 
 import Player from '../components/Player'
 import playlistData from '../data/playlist.json'
 import localTrack from '../resources/pure.m4a'
 
-export default function LandingScreen() {
+export default function PlaylistScreen() {
   const playbackState = usePlaybackState()
 
   useEffect(() => {
@@ -24,6 +24,8 @@ export default function LandingScreen() {
     })
   }, [])
 
+  const [playWhenReady, setPlayWhenReady] = React.useState(true)
+
   async function togglePlayback() {
     const currentTrack = await TrackPlayer.getCurrentTrack()
     if (currentTrack == null) {
@@ -39,12 +41,38 @@ export default function LandingScreen() {
       })
       await TrackPlayer.play()
     } else {
-      if (playbackState === State.Paused) {
+      if (playbackState !== State.Playing) {
         await TrackPlayer.play()
       } else {
         await TrackPlayer.pause()
       }
     }
+  }
+
+  async function togglePlayWhenReady() {
+    const current = await TrackPlayer.getPlayWhenReady()
+    await TrackPlayer.setPlayWhenReady(!current)
+    setPlayWhenReady(!current)
+  }
+
+  async function toggleRepeatMode() {
+    let repeatMode = await TrackPlayer.getRepeatMode()
+
+    switch (repeatMode) {
+      case RepeatMode.None:
+        repeatMode = RepeatMode.Queue
+        break
+
+      case RepeatMode.Queue:
+        repeatMode = RepeatMode.Track
+        break
+
+      case RepeatMode.Track:
+        repeatMode = RepeatMode.None
+        break
+    }
+
+    await TrackPlayer.setRepeatMode(repeatMode)
   }
 
   return (
@@ -53,13 +81,21 @@ export default function LandingScreen() {
         We'll be inserting a playlist into the library loaded from `playlist.json`. We'll also be using the
         `ProgressComponent` which allows us to track playback time.
       </Text>
-      <Player onNext={skipToNext} style={styles.player} onPrevious={skipToPrevious} onTogglePlayback={togglePlayback} />
+      <Player
+        onNext={skipToNext}
+        style={styles.player}
+        onPrevious={skipToPrevious}
+        onTogglePlayback={togglePlayback}
+        onTogglePlayWhenReady={togglePlayWhenReady}
+        onToggleRepeatMode={toggleRepeatMode}
+        playWhenReady={playWhenReady}
+      />
       <Text style={styles.state}>{getStateName(playbackState)}</Text>
     </View>
   )
 }
 
-LandingScreen.navigationOptions = {
+PlaylistScreen.navigationOptions = {
   title: 'Playlist Example',
 }
 
@@ -75,6 +111,12 @@ function getStateName(state) {
       return 'Stopped'
     case State.Buffering:
       return 'Buffering'
+    case State.Ready:
+      return 'Ready'
+    case State.Connecting:
+      return 'Connecting'
+    default:
+      return 'Unknown'
   }
 }
 
@@ -86,7 +128,8 @@ async function skipToNext() {
 
 async function skipToPrevious() {
   try {
-    await TrackPlayer.skipToPrevious()
+    // Rewinds if current progress >= 3
+    await TrackPlayer.skipToPrevious(3)
   } catch (_) {}
 }
 

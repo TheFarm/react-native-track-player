@@ -84,6 +84,7 @@ export interface MetadataOptions {
     dislikeOptions?: FeedbackOptions;
     bookmarkOptions?: FeedbackOptions;
     stopWithApp?: boolean;
+    automaticallyPlayWhenReady?: boolean;
     capabilities?: Capability[];
     notificationCapabilities?: Capability[];
     compactCapabilities?: Capability[];
@@ -117,7 +118,8 @@ export declare enum Event {
     RemoteDuck = "remote-duck",
     RemoteLike = "remote-like",
     RemoteDislike = "remote-dislike",
-    RemoteBookmark = "remote-bookmark"
+    RemoteBookmark = "remote-bookmark",
+    RepeatModeChanged = "repeat-mode-changed"
 }
 export declare enum TrackType {
     Default = "default",
@@ -138,6 +140,11 @@ export declare enum State {
     Stopped,
     Buffering,
     Connecting
+}
+export declare enum RepeatMode {
+    None = "none",
+    Queue = "queue",
+    Track = "track"
 }
 interface TrackMetadataBase {
     title?: string;
@@ -162,6 +169,7 @@ export interface Track extends TrackMetadataBase {
     userAgent?: string;
     contentType?: string;
     pitchAlgorithm?: PitchAlgorithm;
+    initialTime?: number;
     [key: string]: any;
 }
 export {};

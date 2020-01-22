@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import TrackPlayer, { State, Event } from './index'
+import TrackPlayer, { State, Event, RepeatMode } from './index'
 
 /** Get current playback state and subsequent updates  */
 export const usePlaybackState = () => {
@@ -23,6 +23,30 @@ export const usePlaybackState = () => {
   }, [])
 
   return state
+}
+
+/** Get current repeat mode and subsequent updates  */
+export const useRepeatMode = () => {
+  const [repeatMode, setRepeatMode] = useState(RepeatMode.None)
+
+  useEffect(() => {
+    async function updateRepeatMode() {
+      const repeatMode = await TrackPlayer.getRepeatMode()
+      setRepeatMode(repeatMode)
+    }
+
+    updateRepeatMode()
+
+    const sub = TrackPlayer.addEventListener(Event.RepeatModeChanged, data => {
+      setRepeatMode(data.repeatMode)
+    })
+
+    return () => {
+      sub.remove()
+    }
+  }, [])
+
+  return repeatMode
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -83,11 +107,10 @@ export function useProgress(updateInterval?: number) {
   }
 
   useEffect(() => {
-    if (playerState === State.Stopped) {
+    if (playerState === State.Stopped || playerState === State.None || playerState === State.Connecting) {
       setState({ position: 0, duration: 0, buffered: 0 })
       return
     }
-    if (playerState !== State.Playing && playerState !== State.Buffering) return
     const poll = setInterval(getProgress, updateInterval || 1000)
     return () => clearInterval(poll)
   }, [playerState])

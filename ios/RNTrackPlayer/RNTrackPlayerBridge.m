@@ -40,7 +40,8 @@ RCT_EXTERN_METHOD(skip:(NSString *)trackId
 RCT_EXTERN_METHOD(skipToNext:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject);
 
-RCT_EXTERN_METHOD(skipToPrevious:(RCTPromiseResolveBlock)resolve
+RCT_EXTERN_METHOD(skipToPrevious:(double)rewindWhenGte
+                  resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject);
 
 RCT_EXTERN_METHOD(reset:(RCTPromiseResolveBlock)resolve
@@ -71,6 +72,20 @@ RCT_EXTERN_METHOD(setRate:(float)rate
                   rejecter:(RCTPromiseRejectBlock)reject);
 
 RCT_EXTERN_METHOD(getRate:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject);
+
+RCT_EXTERN_METHOD(setRepeatMode:(NSString *)mode
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject);
+
+RCT_EXTERN_METHOD(getRepeatMode:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject);
+
+RCT_EXTERN_METHOD(setPlayWhenReady:(BOOL)playWhenReady
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject);
+
+RCT_EXTERN_METHOD(getPlayWhenReady:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject);
 
 RCT_EXTERN_METHOD(getTrack:(NSString *)trackId
