@@ -68,6 +68,14 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
 
     public abstract void removeUpcomingTracks();
 
+    public abstract void setRepeatMode(int repeatMode);
+
+    public abstract int getRepeatMode();
+
+    public abstract void setPlayWhenReady(boolean playWhenReady);
+
+    public abstract boolean getPlayWhenReady();
+
     public void updateTrack(int index, Track track) {
         int currentIndex = player.getCurrentWindowIndex();
 
@@ -77,9 +85,29 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
             manager.getMetadata().updateMetadata(track);
     }
 
+    public Track getPreviousTrack() {
+        int index = player.getPreviousWindowIndex();
+
+        if (index == C.INDEX_UNSET && queue.size() > 0 && player.getRepeatMode() != Player.REPEAT_MODE_OFF) {
+            return queue.get(queue.size() - 1);
+        }
+
+        return index == C.INDEX_UNSET || index >= queue.size() ? null : queue.get(index);
+    }
+
     public Track getCurrentTrack() {
         int index = player.getCurrentWindowIndex();
         return index < 0 || index >= queue.size() ? null : queue.get(index);
+    }
+
+    public Track getNextTrack() {
+        int index = player.getNextWindowIndex();
+
+        if (index == C.INDEX_UNSET && queue.size() > 0 && player.getRepeatMode() != Player.REPEAT_MODE_OFF) {
+            return queue.get(0);
+        }
+
+        return index == C.INDEX_UNSET || index >= queue.size() ? null : queue.get(index);
     }
 
     public void skip(String id, Promise promise) {
@@ -319,7 +347,7 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
 
     @Override
     public void onRepeatModeChanged(int repeatMode) {
-        // Repeat mode update
+        manager.onRepeatModeChanged(repeatMode);
     }
 
     @Override

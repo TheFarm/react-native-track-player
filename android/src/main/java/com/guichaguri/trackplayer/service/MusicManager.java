@@ -236,6 +236,14 @@ public class MusicManager implements OnAudioFocusChangeListener {
         service.emit(MusicEvents.PLAYBACK_QUEUE_ENDED, bundle);
     }
 
+    public void onRepeatModeChanged(int mode) {
+        Log.d(Utils.LOG, "onRepeatModeChanged");
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("repeatMode", mode);
+        service.emit(MusicEvents.REPEAT_MODE_CHANGED, bundle);
+    }
+
     public void onMetadataReceived(String source, String title, String url, String artist, String album, String date, String genre) {
         Log.d(Utils.LOG, "onMetadataReceived: " + source);
 

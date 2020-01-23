@@ -12,6 +12,7 @@ import android.util.Log;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.facebook.react.bridge.*;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.Player;
 import com.guichaguri.trackplayer.service.MusicBinder;
 import com.guichaguri.trackplayer.service.MusicService;
 import com.guichaguri.trackplayer.service.Utils;
@@ -148,6 +149,11 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
         constants.put("RATING_4_STARS", RatingCompat.RATING_4_STARS);
         constants.put("RATING_5_STARS", RatingCompat.RATING_5_STARS);
         constants.put("RATING_PERCENTAGE", RatingCompat.RATING_PERCENTAGE);
+
+        // Repeat Modes
+        constants.put("REPEAT_MODE_NONE", Player.REPEAT_MODE_OFF);
+        constants.put("REPEAT_MODE_QUEUE", Player.REPEAT_MODE_ALL);
+        constants.put("REPEAT_MODE_TRACK", Player.REPEAT_MODE_ONE);
 
         return constants;
     }
@@ -322,7 +328,23 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
 
     @ReactMethod
     public void skipToPrevious(final Promise callback) {
-        waitForConnection(() -> binder.getPlayback().skipToPrevious(callback));
+        skipToPrevious(0, callback);
+    }
+
+    @ReactMethod
+    public void skipToPrevious(final long rewindWhenGte, final Promise callback) {
+        waitForConnection(() -> {
+            long rewindWhenGteMs = rewindWhenGte * 1000;
+            ExoPlayback playback = binder.getPlayback();
+            Track previous = playback.getPreviousTrack();
+            long position = playback.getPosition();
+            if (rewindWhenGteMs > 0 && position <= rewindWhenGteMs || previous == null) {
+                playback.seekTo(0);
+                callback.resolve(null);
+            } else {
+                playback.skipToPrevious(callback);
+            }
+        });
     }
 
     @ReactMethod
@@ -388,17 +410,34 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
     }
 
     @ReactMethod
-    public void setRepeatMode(final String mode, final Promise callback) {
+    public void getRate(final Promise callback) {
+        waitForConnection(() -> callback.resolve(binder.getPlayback().getRate()));
+    }
+
+    @ReactMethod
+    public void setRepeatMode(int mode, final Promise callback) {
         waitForConnection(() -> {
             binder.getPlayback().setRepeatMode(mode);
             callback.resolve(null);
         });
-
     }
 
     @ReactMethod
-    public void getRate(final Promise callback) {
-        waitForConnection(() -> callback.resolve(binder.getPlayback().getRate()));
+    public void getRepeatMode(int mode, final Promise callback) {
+        waitForConnection(() -> callback.resolve(binder.getPlayback().getRepeatMode()));
+    }
+
+    @ReactMethod
+    public void setPlayWhenReady(final boolean play, final Promise callback) {
+        waitForConnection(() -> {
+            binder.getPlayback().setPlayWhenReady(play);
+            callback.resolve(null);
+        });
+    }
+
+    @ReactMethod
+    public void getPlayWhenReady(final Promise callback) {
+        waitForConnection(() -> callback.resolve((binder.getPlayback().getPlayWhenReady())));
     }
 
     @ReactMethod
