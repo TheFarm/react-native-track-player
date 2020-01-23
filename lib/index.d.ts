@@ -9,7 +9,7 @@ declare function remove(tracks: Track | Track[]): Promise<void>;
 declare function removeUpcomingTracks(): Promise<void>;
 declare function skip(trackId: string): Promise<void>;
 declare function skipToNext(): Promise<void>;
-declare function skipToPrevious(rewindWhenGte?: number): Promise<void>;
+declare function skipToPrevious(rewindWhenPositionLteSeconds?: number): Promise<void>;
 declare function updateOptions(options?: MetadataOptions): Promise<void>;
 declare function updateMetadataForTrack(trackId: string, metadata: TrackMetadata): Promise<void>;
 declare function clearNowPlayingMetadata(): Promise<void>;

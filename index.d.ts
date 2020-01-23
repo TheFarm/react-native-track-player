@@ -140,7 +140,7 @@ declare namespace RNTrackPlayer {
   export function remove(trackIds: string | string[]): Promise<void>
   export function skip(trackId: string): Promise<void>
   export function skipToNext(): Promise<void>
-  export function skipToPrevious(rewindWhenGte?: number): Promise<void>
+  export function skipToPrevious(rewindWhenPositionLteSeconds?: number): Promise<void>
   export function removeUpcomingTracks(): Promise<void>
 
   // Control Center / Notification Metadata Commands

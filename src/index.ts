@@ -92,8 +92,8 @@ async function skipToNext(): Promise<void> {
   return TrackPlayer.skipToNext()
 }
 
-async function skipToPrevious(rewindWhenGte?: number): Promise<void> {
-  return TrackPlayer.skipToPrevious(rewindWhenGte || 0)
+async function skipToPrevious(rewindWhenPositionLteSeconds?: number): Promise<void> {
+  return TrackPlayer.skipToPrevious(rewindWhenPositionLteSeconds || 0)
 }
 
 // MARK: - Control Center / Notifications API

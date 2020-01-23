@@ -12,7 +12,9 @@ import android.support.v4.media.RatingCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.views.imagehelper.ResourceDrawableIdHelper;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
+import android.support.v4.media.session.PlaybackStateCompat.RepeatMode;
 
 /**
  * @author Guichaguri
@@ -150,6 +152,35 @@ public class Utils {
         } else {
             data.putDouble(key, rating.getStarRating());
         }
+    }
+
+    public static int getRepeatMode(String mode) {
+        if (mode != null) {
+            switch (mode) {
+                case "queue":
+                    return Player.REPEAT_MODE_ALL;
+                case "track":
+                    return Player.REPEAT_MODE_ONE;
+                default:
+                    return Player.REPEAT_MODE_OFF;
+            }
+        }
+        return Player.REPEAT_MODE_OFF;
+    }
+
+    public static String getRepeatMode(int mode) {
+        switch (mode) {
+            case Player.REPEAT_MODE_ALL:
+                return "queue";
+            case Player.REPEAT_MODE_ONE:
+                return "track";
+            default:
+                return "none";
+        }
+    }
+
+    public static void setRepeatMode(Bundle data, String key, int mode) {
+        data.putString(key, getRepeatMode(mode));
     }
 
     public static int getInt(Bundle data, String key, int defaultValue) {

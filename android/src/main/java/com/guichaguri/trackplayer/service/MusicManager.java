@@ -240,7 +240,7 @@ public class MusicManager implements OnAudioFocusChangeListener {
         Log.d(Utils.LOG, "onRepeatModeChanged");
 
         Bundle bundle = new Bundle();
-        bundle.putInt("repeatMode", mode);
+        Utils.setRepeatMode(bundle, "repeatMode", mode);
         service.emit(MusicEvents.REPEAT_MODE_CHANGED, bundle);
     }
 

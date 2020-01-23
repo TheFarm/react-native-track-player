@@ -327,18 +327,14 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
     }
 
     @ReactMethod
-    public void skipToPrevious(final Promise callback) {
-        skipToPrevious(0, callback);
-    }
-
-    @ReactMethod
-    public void skipToPrevious(final long rewindWhenGte, final Promise callback) {
+    public void skipToPrevious(final float rewindWhenLteSeconds, final Promise callback) {
         waitForConnection(() -> {
-            long rewindWhenGteMs = rewindWhenGte * 1000;
+            long rewindWhenLteMs = Utils.toMillis(rewindWhenLteSeconds);
             ExoPlayback playback = binder.getPlayback();
             Track previous = playback.getPreviousTrack();
             long position = playback.getPosition();
-            if (rewindWhenGteMs > 0 && position <= rewindWhenGteMs || previous == null) {
+
+            if (rewindWhenLteMs > 0 && position >= rewindWhenLteMs || previous == null) {
                 playback.seekTo(0);
                 callback.resolve(null);
             } else {
@@ -415,16 +411,16 @@ public class MusicModule extends ReactContextBaseJavaModule implements ServiceCo
     }
 
     @ReactMethod
-    public void setRepeatMode(int mode, final Promise callback) {
+    public void setRepeatMode(String mode, final Promise callback) {
         waitForConnection(() -> {
-            binder.getPlayback().setRepeatMode(mode);
+            binder.getPlayback().setRepeatMode(Utils.getRepeatMode(mode));
             callback.resolve(null);
         });
     }
 
     @ReactMethod
-    public void getRepeatMode(int mode, final Promise callback) {
-        waitForConnection(() -> callback.resolve(binder.getPlayback().getRepeatMode()));
+    public void getRepeatMode(final Promise callback) {
+        waitForConnection(() -> callback.resolve(Utils.getRepeatMode(binder.getPlayback().getRepeatMode())));
     }
 
     @ReactMethod

@@ -40,7 +40,7 @@ RCT_EXTERN_METHOD(skip:(NSString *)trackId
 RCT_EXTERN_METHOD(skipToNext:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject);
 
-RCT_EXTERN_METHOD(skipToPrevious:(double)rewindWhenGte
+RCT_EXTERN_METHOD(skipToPrevious:(double)rewindWhenLte
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject);
 

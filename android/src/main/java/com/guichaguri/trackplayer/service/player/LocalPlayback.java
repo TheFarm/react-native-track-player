@@ -147,16 +147,6 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
         return player.getRepeatMode();
     }
 
-    @Override
-    public void setPlayWhenReady(boolean playWhenReady) {
-        player.setPlayWhenReady(playWhenReady);
-    }
-
-    @Override
-    public boolean getPlayWhenReady() {
-        return player.getPlayWhenReady();
-    }
-
     private void resetQueue() {
         queue.clear();
 

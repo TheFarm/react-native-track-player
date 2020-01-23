@@ -41,6 +41,7 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
     protected int previousState = PlaybackStateCompat.STATE_NONE;
     protected float volumeMultiplier = 1.0F;
     protected boolean autoUpdateMetadata;
+    protected boolean playWhenReady = true;
 
     public ExoPlayback(Context context, MusicManager manager, T player, boolean autoUpdateMetadata) {
         this.context = context;
@@ -72,9 +73,13 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
 
     public abstract int getRepeatMode();
 
-    public abstract void setPlayWhenReady(boolean playWhenReady);
+    public void setPlayWhenReady(boolean playWhenReady) {
+        this.playWhenReady = playWhenReady;
+    }
 
-    public abstract boolean getPlayWhenReady();
+    public boolean getPlayWhenReady() {
+        return this.playWhenReady;
+    }
 
     public void updateTrack(int index, Track track) {
         int currentIndex = player.getCurrentWindowIndex();
@@ -122,6 +127,7 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
                 lastKnownPosition = player.getCurrentPosition();
 
                 player.seekToDefaultPosition(i);
+                player.setPlayWhenReady(this.playWhenReady);
                 promise.resolve(null);
                 return;
             }
@@ -142,6 +148,7 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
         lastKnownPosition = player.getCurrentPosition();
 
         player.seekToDefaultPosition(prev);
+        player.setPlayWhenReady(this.playWhenReady);
         promise.resolve(null);
     }
 
@@ -157,6 +164,7 @@ public abstract class ExoPlayback<T extends Player> implements EventListener, Me
         lastKnownPosition = player.getCurrentPosition();
 
         player.seekToDefaultPosition(next);
+        player.setPlayWhenReady(this.playWhenReady);
         promise.resolve(null);
     }
 

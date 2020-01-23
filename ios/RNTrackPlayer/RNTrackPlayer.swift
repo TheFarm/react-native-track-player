@@ -457,8 +457,8 @@ public class RNTrackPlayer: RCTEventEmitter {
     }
     
     @objc(skipToPrevious:resolver:rejecter:)
-    public func skipToPrevious(_ rewindWhenGte: Double = 0, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        if (rewindWhenGte > 0 && player.currentTime >= rewindWhenGte) || player.previousItem == nil {
+    public func skipToPrevious(_ rewindWhenLte: Double = 0, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        if (rewindWhenLte > 0 && player.currentTime >= rewindWhenLte) || player.previousItem == nil {
             print("Rewinding to start of track")
             player.seek(to: 0)
             resolve(NSNull())
