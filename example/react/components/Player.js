@@ -63,6 +63,7 @@ export default function Player(props) {
     onTogglePlayWhenReady,
     onToggleRepeatMode,
     playWhenReady,
+    onSeekTo,
   } = props
 
   var middleButtonText = 'Play'
@@ -90,6 +91,10 @@ export default function Player(props) {
         <ControlButton title={`Repeat: ${repeatMode}`} onPress={onToggleRepeatMode} />
         <ControlButton title={`Auto play: ${playWhenReady}`} onPress={onTogglePlayWhenReady} />
       </View>
+      <View style={styles.controls}>
+        <ControlButton title={`Seek to 20s`} onPress={() => onSeekTo(20)} />
+        <ControlButton title={`Seek to 8s`} onPress={() => onSeekTo(8)} />
+      </View>
       <View>
         <Text>Current: {progress.position | 0} sec</Text>
         <Text>Buffered: {progress.bufferedPosition | 0} sec</Text>
@@ -106,6 +111,7 @@ Player.propTypes = {
   onTogglePlayback: PropTypes.func.isRequired,
   onTogglePlayWhenReady: PropTypes.func.isRequired,
   onToggleRepeatMode: PropTypes.func.isRequired,
+  onSeekTo: PropTypes.func.isRequired,
   playWhenReady: PropTypes.bool,
 }
 

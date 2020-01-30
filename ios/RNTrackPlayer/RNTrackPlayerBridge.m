@@ -57,6 +57,8 @@ RCT_EXTERN_METHOD(stop:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject);
 
 RCT_EXTERN_METHOD(seekTo:(double)time
+                  toleranceBefore:(double)toleranceBefore
+                  toleranceAfter:(double)toleranceAfter
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject);
 

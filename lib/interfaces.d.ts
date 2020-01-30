@@ -34,6 +34,8 @@ export interface PlayerOptions {
     iosCategory?: IOSCategory;
     iosCategoryMode?: IOSCategoryMode;
     iosCategoryOptions?: IOSCategoryOptions[];
+    seekToleranceBefore?: number;
+    seekToleranceAfter?: number;
     /**
      * Indicates whether the player should automatically delay playback in order to minimize stalling.
      * Defaults to `false`.
@@ -74,7 +76,8 @@ export declare enum Capability {
     SetRating,
     Like,
     Dislike,
-    Bookmark
+    Bookmark,
+    RepeatMode
 }
 export declare type ResourceObject = number;
 export interface MetadataOptions {
@@ -119,6 +122,7 @@ export declare enum Event {
     RemoteLike = "remote-like",
     RemoteDislike = "remote-dislike",
     RemoteBookmark = "remote-bookmark",
+    RemoteChangeRepeatMode = "remote-change-repeat-mode",
     RepeatModeChanged = "repeat-mode-changed"
 }
 export declare enum TrackType {

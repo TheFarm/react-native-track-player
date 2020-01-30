@@ -75,6 +75,11 @@ export default function PlaylistScreen() {
     await TrackPlayer.setRepeatMode(repeatMode)
   }
 
+  async function seekToExactly(seconds: number) {
+    await TrackPlayer.seekTo(seconds, 0, 0)
+    await TrackPlayer.play()
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.description}>
@@ -88,6 +93,7 @@ export default function PlaylistScreen() {
         onTogglePlayback={togglePlayback}
         onTogglePlayWhenReady={togglePlayWhenReady}
         onToggleRepeatMode={toggleRepeatMode}
+        onSeekTo={seekToExactly}
         playWhenReady={playWhenReady}
       />
       <Text style={styles.state}>{getStateName(playbackState)}</Text>

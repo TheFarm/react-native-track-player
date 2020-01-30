@@ -221,6 +221,8 @@ PODS:
     - ReactCommon/jscallinvoker (= 0.61.5)
   - RNGestureHandler (1.5.3):
     - React
+  - RNScreens (2.0.0-alpha.32):
+    - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -253,6 +255,7 @@ DEPENDENCIES:
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -312,6 +315,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -343,6 +348,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
+  RNScreens: a55364dc1833101f836cee70975ce1fea615a12f
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 10ca690063a0f344724d19ba5f64209adba06d58

@@ -101,6 +101,7 @@ public class RNTrackPlayer: RCTEventEmitter {
             "remote-like",
             "remote-dislike",
             "remote-bookmark",
+            "remote-change-repeat-mode",
             
             "repeat-mode-changed",
         ]
@@ -187,6 +188,14 @@ public class RNTrackPlayer: RCTEventEmitter {
         
         try? AVAudioSession.sharedInstance().setCategory(sessionCategory, mode: sessionCategoryMode, options: sessionCategoryOptions)
         
+        // Configure seek tolerances
+        if let seekToleranceBefore = config["seekToleranceBefore"] as? Double {
+            player.seekToleranceBefore = CMTimeMakeWithSeconds(seekToleranceBefore, preferredTimescale: 1000)
+        }
+        
+        if let seekToleranceAfter = config["seekToleranceAfter"] as? Double {
+            player.seekToleranceAfter = CMTimeMakeWithSeconds(seekToleranceAfter, preferredTimescale: 1000)
+        }
         
         // setup event listeners
         player.event.stateChange.addListener(self) { [weak self] state in
@@ -309,6 +318,11 @@ public class RNTrackPlayer: RCTEventEmitter {
             return MPRemoteCommandHandlerStatus.success
         }
         
+        player.remoteCommandController.handleChangeRepeatModeCommand = { [weak self] event in
+            self?.sendEvent(withName: "remote-change-repeat-mode", body: nil)
+            return MPRemoteCommandHandlerStatus.success
+        }
+        
         hasInitialized = true
         resolve(NSNull())
     }
@@ -335,6 +349,14 @@ public class RNTrackPlayer: RCTEventEmitter {
         
         if let automaticallyPlayWhenReady = options["automaticallyPlayWhenReady"] as? Bool {
             player.automaticallyPlayWhenReady = automaticallyPlayWhenReady
+        }
+        
+        if let seekToleranceBefore = options["seekToleranceBefore"] as? Double {
+            player.seekToleranceBefore = CMTimeMakeWithSeconds(seekToleranceBefore, preferredTimescale: 1000)
+        }
+        
+        if let seekToleranceAfter = options["seekToleranceAfter"] as? Double {
+            player.seekToleranceAfter = CMTimeMakeWithSeconds(seekToleranceAfter, preferredTimescale: 1000)
         }
         
         resolve(NSNull())
@@ -516,10 +538,18 @@ public class RNTrackPlayer: RCTEventEmitter {
         resolve(NSNull())
     }
     
-    @objc(seekTo:resolver:rejecter:)
-    public func seek(to time: Double, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        print("Seeking to \(time) seconds")
-        player.seek(to: time)
+    @objc(seekTo:toleranceBefore:toleranceAfter:resolver:rejecter:)
+    public func seek(to time: Double, toleranceBefore: Double = .nan, toleranceAfter: Double = .nan, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        if toleranceBefore != .nan && toleranceAfter != .nan {
+            print("Seeking to \(time) seconds with toleranceBefore: \(toleranceBefore) toleranceAfter: \(toleranceAfter)")
+            player.seek(
+                to: time,
+                toleranceBefore: toleranceBefore == 0 ? CMTime.zero : CMTimeMakeWithSeconds(toleranceBefore, preferredTimescale: 1000),
+                toleranceAfter: toleranceAfter == 0 ? CMTime.zero : CMTimeMakeWithSeconds(toleranceAfter, preferredTimescale: 1000))
+        } else {
+            print("Seeking to \(time) seconds")
+            player.seek(to: time)
+        }
         resolve(NSNull())
     }
     

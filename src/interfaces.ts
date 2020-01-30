@@ -40,6 +40,9 @@ export interface PlayerOptions {
   iosCategory?: IOSCategory
   iosCategoryMode?: IOSCategoryMode
   iosCategoryOptions?: IOSCategoryOptions[]
+  seekToleranceBefore?: number
+  seekToleranceAfter?: number
+
   /**
    * Indicates whether the player should automatically delay playback in order to minimize stalling.
    * Defaults to `false`.
@@ -85,6 +88,7 @@ export enum Capability {
   Like = TrackPlayer.CAPABILITY_LIKE,
   Dislike = TrackPlayer.CAPABILITY_DISLIKE,
   Bookmark = TrackPlayer.CAPABILITY_BOOKMARK,
+  RepeatMode = TrackPlayer.CAPABILITY_REPEAT_MODE,
 }
 
 export type ResourceObject = number
@@ -134,6 +138,7 @@ export enum Event {
   RemoteLike = 'remote-like',
   RemoteDislike = 'remote-dislike',
   RemoteBookmark = 'remote-bookmark',
+  RemoteChangeRepeatMode = 'remote-change-repeat-mode',
   RepeatModeChanged = 'repeat-mode-changed',
 }
 

@@ -24,6 +24,7 @@ declare namespace RNTrackPlayer {
     | 'remote-like'
     | 'remote-dislike'
     | 'remote-bookmark'
+    | 'remote-change-repeat-mode'
     | 'repeat-mode-changed'
 
   export type TrackType = 'default' | 'dash' | 'hls' | 'smoothstreaming'
@@ -153,7 +154,7 @@ declare namespace RNTrackPlayer {
   export function play(): Promise<void>
   export function pause(): Promise<void>
   export function stop(): Promise<void>
-  export function seekTo(seconds: number): Promise<void>
+  export function seekTo(position: number, toleranceBefore?: number, toleranceAfter?: number): Promise<void>
   export function setVolume(level: number): Promise<void>
   export function setRate(rate: number): Promise<void>
   export function setRepeatMode(type: RepeatMode): Promise<void>
@@ -217,6 +218,7 @@ declare namespace RNTrackPlayer {
   export const CAPABILITY_LIKE: Capability
   export const CAPABILITY_DISLIKE: Capability
   export const CAPABILITY_BOOKMARK: Capability
+  export const CAPABILITY_REPEAT_MODE: Capability
 
   export const PITCH_ALGORITHM_LINEAR: PitchAlgorithm
   export const PITCH_ALGORITHM_MUSIC: PitchAlgorithm
