@@ -484,6 +484,10 @@ public class RNTrackPlayer: RCTEventEmitter {
     public func reset(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         print("Resetting player.")
         player.stop()
+        sendEvent(withName: "repeat-mode-changed", body: [
+            "repeatMode": AudioPlayerRepeatMode.none.rawValue as Any
+        ])
+        player.repeatMode = .none
         resolve(NSNull())
         DispatchQueue.main.async {
             UIApplication.shared.endReceivingRemoteControlEvents();

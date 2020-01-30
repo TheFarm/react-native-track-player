@@ -182,6 +182,7 @@ public class LocalPlayback extends ExoPlayback<SimpleExoPlayer> {
     public void reset() {
         Track track = getCurrentTrack();
         long position = player.getCurrentPosition();
+        player.setRepeatMode(Player.REPEAT_MODE_OFF);
 
         super.reset();
         resetQueue();
