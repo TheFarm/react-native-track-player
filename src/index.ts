@@ -144,9 +144,8 @@ async function stop(): Promise<void> {
   return TrackPlayer.stop()
 }
 
-// if toleranceBefore is set, toleranceAfter must also be set to take any effect.
-async function seekTo(position: number, toleranceBefore?: number, toleranceAfter?: number): Promise<void> {
-  return TrackPlayer.seekTo(position, toleranceBefore, toleranceAfter)
+async function seekTo(position: number): Promise<void> {
+  return TrackPlayer.seekTo(position)
 }
 
 async function setVolume(level: number): Promise<void> {

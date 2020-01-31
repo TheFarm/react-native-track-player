@@ -12,7 +12,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View, ViewPropTypes } from '
 
 function ProgressBar() {
   const progress = useProgress(250)
-
   return (
     <View style={styles.progress}>
       <View style={{ flex: progress.position, backgroundColor: 'red' }} />
@@ -92,8 +91,8 @@ export default function Player(props) {
         <ControlButton title={`Auto play: ${playWhenReady}`} onPress={onTogglePlayWhenReady} />
       </View>
       <View style={styles.controls}>
-        <ControlButton title={`Seek to 20s`} onPress={() => onSeekTo(20)} />
         <ControlButton title={`Seek to 8s`} onPress={() => onSeekTo(8)} />
+        <ControlButton title={`Seek to 20s`} onPress={() => onSeekTo(20)} />
       </View>
       <View>
         <Text>Current: {progress.position | 0} sec</Text>

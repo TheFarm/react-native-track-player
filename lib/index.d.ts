@@ -18,7 +18,7 @@ declare function reset(): Promise<void>;
 declare function play(): Promise<void>;
 declare function pause(): Promise<void>;
 declare function stop(): Promise<void>;
-declare function seekTo(position: number, toleranceBefore?: number, toleranceAfter?: number): Promise<void>;
+declare function seekTo(position: number): Promise<void>;
 declare function setVolume(level: number): Promise<void>;
 declare function setRate(rate: number): Promise<void>;
 declare function setRepeatMode(repeat: RepeatMode): Promise<void>;

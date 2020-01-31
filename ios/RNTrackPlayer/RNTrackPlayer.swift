@@ -190,11 +190,13 @@ public class RNTrackPlayer: RCTEventEmitter {
         
         // Configure seek tolerances
         if let seekToleranceBefore = config["seekToleranceBefore"] as? Double {
-            player.seekToleranceBefore = CMTimeMakeWithSeconds(seekToleranceBefore, preferredTimescale: 1000)
+            player.seekToleranceBefore = seekToleranceBefore > 0 ?
+                CMTimeMakeWithSeconds(seekToleranceBefore, preferredTimescale: 1000) : .zero
         }
         
         if let seekToleranceAfter = config["seekToleranceAfter"] as? Double {
-            player.seekToleranceAfter = CMTimeMakeWithSeconds(seekToleranceAfter, preferredTimescale: 1000)
+            player.seekToleranceAfter = seekToleranceAfter > 0 ?
+                CMTimeMakeWithSeconds(seekToleranceAfter, preferredTimescale: 1000) : .zero
         }
         
         // setup event listeners
@@ -352,11 +354,13 @@ public class RNTrackPlayer: RCTEventEmitter {
         }
         
         if let seekToleranceBefore = options["seekToleranceBefore"] as? Double {
-            player.seekToleranceBefore = CMTimeMakeWithSeconds(seekToleranceBefore, preferredTimescale: 1000)
+            player.seekToleranceBefore = seekToleranceBefore > 0 ?
+                CMTimeMakeWithSeconds(seekToleranceBefore, preferredTimescale: 1000) : .zero
         }
         
         if let seekToleranceAfter = options["seekToleranceAfter"] as? Double {
-            player.seekToleranceAfter = CMTimeMakeWithSeconds(seekToleranceAfter, preferredTimescale: 1000)
+            player.seekToleranceAfter = seekToleranceAfter > 0 ?
+                CMTimeMakeWithSeconds(seekToleranceAfter, preferredTimescale: 1000) : .zero
         }
         
         resolve(NSNull())
@@ -538,18 +542,10 @@ public class RNTrackPlayer: RCTEventEmitter {
         resolve(NSNull())
     }
     
-    @objc(seekTo:toleranceBefore:toleranceAfter:resolver:rejecter:)
-    public func seek(to time: Double, toleranceBefore: Double = .nan, toleranceAfter: Double = .nan, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
-        if toleranceBefore != .nan && toleranceAfter != .nan {
-            print("Seeking to \(time) seconds with toleranceBefore: \(toleranceBefore) toleranceAfter: \(toleranceAfter)")
-            player.seek(
-                to: time,
-                toleranceBefore: toleranceBefore == 0 ? CMTime.zero : CMTimeMakeWithSeconds(toleranceBefore, preferredTimescale: 1000),
-                toleranceAfter: toleranceAfter == 0 ? CMTime.zero : CMTimeMakeWithSeconds(toleranceAfter, preferredTimescale: 1000))
-        } else {
-            print("Seeking to \(time) seconds")
-            player.seek(to: time)
-        }
+    @objc(seekTo:resolver:rejecter:)
+    public func seek(to time: Double, resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
+        print("Seeking to \(time) seconds")
+        player.seek(to: time)
         resolve(NSNull())
     }
     

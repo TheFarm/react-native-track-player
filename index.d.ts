@@ -154,7 +154,7 @@ declare namespace RNTrackPlayer {
   export function play(): Promise<void>
   export function pause(): Promise<void>
   export function stop(): Promise<void>
-  export function seekTo(position: number, toleranceBefore?: number, toleranceAfter?: number): Promise<void>
+  export function seekTo(position: number): Promise<void>
   export function setVolume(level: number): Promise<void>
   export function setRate(rate: number): Promise<void>
   export function setRepeatMode(type: RepeatMode): Promise<void>

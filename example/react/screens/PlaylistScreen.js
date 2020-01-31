@@ -21,6 +21,8 @@ export default function PlaylistScreen() {
         Capability.Stop,
       ],
       compactCapabilities: [Capability.Play, Capability.Pause],
+      seekToleranceBefore: 0,
+      seekToleranceAfter: 0,
     })
   }, [])
 
@@ -75,8 +77,8 @@ export default function PlaylistScreen() {
     await TrackPlayer.setRepeatMode(repeatMode)
   }
 
-  async function seekToExactly(seconds: number) {
-    await TrackPlayer.seekTo(seconds, 0, 0)
+  async function seekTo(seconds: number) {
+    await TrackPlayer.seekTo(seconds)
     await TrackPlayer.play()
   }
 
@@ -93,7 +95,7 @@ export default function PlaylistScreen() {
         onTogglePlayback={togglePlayback}
         onTogglePlayWhenReady={togglePlayWhenReady}
         onToggleRepeatMode={toggleRepeatMode}
-        onSeekTo={seekToExactly}
+        onSeekTo={seekTo}
         playWhenReady={playWhenReady}
       />
       <Text style={styles.state}>{getStateName(playbackState)}</Text>
