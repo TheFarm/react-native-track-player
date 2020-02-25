@@ -107,11 +107,12 @@ export function useProgress(updateInterval?: number) {
   }
 
   useEffect(() => {
+    let poll: number
     if (playerState === State.Stopped || playerState === State.None || playerState === State.Connecting) {
       setState({ position: 0, duration: 0, buffered: 0 })
-      return
+    } else {
+      poll = setInterval(getProgress, updateInterval || 1000)
     }
-    const poll = setInterval(getProgress, updateInterval || 1000)
     return () => clearInterval(poll)
   }, [playerState])
 
