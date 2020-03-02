@@ -662,15 +662,18 @@ public class RNTrackPlayer: RCTEventEmitter {
         if (player.currentItem as! Track).id == track.id {
             Metadata.update(for: player, with: metadata)
         }
+        resolve(NSNull())
     }
     
     @objc(clearNowPlayingMetadata:rejecter:)
     public func clearNowPlayingMetadata(resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         player.nowPlayingInfoController.clear()
+        resolve(NSNull())
     }
     
     @objc(updateNowPlayingMetadata:resolver:rejecter:)
     public func updateNowPlayingMetadata(metadata: [String: Any], resolve: RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock) {
         Metadata.update(for: player, with: metadata)
+        resolve(NSNull())
     }
 }
