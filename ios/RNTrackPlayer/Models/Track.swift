@@ -140,6 +140,7 @@ class Track: NSObject, AudioItem, InitialTiming, TimePitching, AssetOptionsProvi
     }
     
     // MARK: - InitialTiming Protocol
+    
     func getInitialTime() -> TimeInterval {
         return initialTime
     }

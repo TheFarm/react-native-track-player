@@ -39,6 +39,10 @@ public class RNTrackPlayer: RCTEventEmitter {
         return true;
     }
     
+    override public var methodQueue: DispatchQueue! {
+        return DispatchQueue.main
+    }
+    
     @objc(constantsToExport)
     override public func constantsToExport() -> [AnyHashable: Any] {
         return [
