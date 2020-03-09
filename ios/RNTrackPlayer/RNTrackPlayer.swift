@@ -235,10 +235,13 @@ public class RNTrackPlayer: RCTEventEmitter {
                     // we are not using automaticallyPlayNextSong on the player in order
                     // to be in control of specifically when the above events are sent
                     // so, attempt to go to the next track now
-                    
-                    // also make sure that we're not supposed to repeat the current track first
-                    if self.player.repeatMode != .track {
-                        try? self.player.next()
+
+                    // This is really important, ONLY ACCESS THE PLAYER ON THE MAIN THREAD!!
+                    DispatchQueue.main.async {
+                        // also make sure that we're not supposed to repeat the current track first
+                        if self.player.repeatMode != .track {
+                            try? self.player.next()
+                        }
                     }
                 }
             }

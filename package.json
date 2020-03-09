@@ -57,18 +57,17 @@
     "url": "https://github.com/react-native-kit/react-native-track-player/issues"
   },
   "peerDependencies": {
-    "react": "16.9.0",
     "react-native": "^0.61"
   },
   "devDependencies": {
-    "@types/react-native": "^0.61.0",
-    "@typescript-eslint/eslint-plugin": "^1.7.0",
-    "@typescript-eslint/parser": "^1.7.0",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.2.0",
+    "@types/react-native": "^0.61.20",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "^2.22.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-prettier": "^3.0.1",
     "prettier": "^1.17.0",
-    "rimraf": "^2.6.2",
-    "typescript": "^3.2.4"
+    "rimraf": "^3.0.2",
+    "typescript": "^3.8.3"
   }
 }
